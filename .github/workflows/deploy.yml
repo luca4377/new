@@ -12,16 +12,13 @@ jobs:
     steps:
     - name: Checkout Repository
       uses: actions/checkout@v3
-
-    - name: Setup SSH
-      uses: webfactory/ssh-agent@v0.9.1
-      with:
-        ssh-private-key: ${{ secrets.DEPLOY_KEY }}
-
-    - name: Deploy to Server
-      run: |
-        ssh -o StrictHostKeyChecking=no ${{ luwi }}@${{ 91.98.226.9 }} "
-          cd /var/www/myapp || mkdir -p /var/www/myapp
-          git pull || git clone git@github.com:luca4377/restaurant-site.git /var/www/myapp
-        "
-
+      
+    steps:
+      - name: Execute remote SSH commands using password
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          port: ${{ secrets.PORT }}
+          script: whoami
